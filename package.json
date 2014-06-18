@@ -1,0 +1,21 @@
+{
+  "name": "stupidServer",
+  "version": "0.0.1",
+  "description": "A really stupid server",
+  "main": "index.js",
+  "author": "Matthew Cheely",
+  "license": "MIT",
+  "bin": {
+    "stupidServer": "server.js"
+  },
+  "dependencies": {
+    "express": "^4.4.3",
+    "serve-index": "^1.1.1",
+    "serve-static": "^1.2.3"
+  },
+  "preferGlobal": true,
+  "repository": {
+    "type": "git",
+    "url": "foo"
+  }
+}
