@@ -1,13 +1,13 @@
 stupid-server
 =============
 
-A rock stupid node static file server, built with express.
+A rock stupid command-line static file server, built with node/express.
 
 ###Install it
     npm install -g stupid-server
 
 ###Run it
-    stupidServer  [OPTION]... [DIR]
+    stupidserver  [OPTION]... [DIR]
 
 Navigate to http://localhost:8080/ and you'll find the contents of the specified directory, or the current directory if none was specified.
 
@@ -20,7 +20,7 @@ Possibly Askable Questions
 ==========================
 
 ####Why would you build such a thing?
-I often just want to fool around with some client-side js in a browser, just to try out an idea. I don't want to jump through any hoops to get my code in a browser, but I don't want to use codepen or jsfiddle either, as it may eventually evolve into someting more useful.
+I often just want to fool around with some client-side html/css/js, just to try out an idea. I don't want to jump through hoops to get the code in a browser, but I don't want to use codepen or jsfiddle either, as it may eventually evolve into someting more useful.
 
 ####But X other thing already does this
 Well, crap. Now I just feel stupid.
