@@ -1,5 +1,5 @@
 {
-  "name": "stupidServer",
+  "name": "stupid-server",
   "version": "0.0.1",
   "description": "A really stupid server",
   "main": "index.js",
