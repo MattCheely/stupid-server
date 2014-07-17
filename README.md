@@ -8,7 +8,7 @@ A rock stupid command-line static file server, built with node/express.
 
 ###Use it
 
-      Usage: server-cli [options] [path-to-host]
+      Usage: stupid-sever [options] [path-to-host]
 
       Options:
 
