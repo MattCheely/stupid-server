@@ -24,6 +24,11 @@ A rock stupid command-line static file server, built with node/express.
         The --flatten option is primarily useful for single page js apps that use
         the history api to create natural URIs rather than hash based routes
 
+###Notes
+
+The flatten middleware may have issues when running under Windows, as it's using the
+path module for some URL path logic, because I'm lazy.
+
 
 Possibly Askable Questions
 ==========================
