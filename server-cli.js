@@ -32,5 +32,4 @@ function extractOptions(program) {
 var options = extractOptions(program);
 options.path = program.args[0];
 
-console.log(options);
 server(options);

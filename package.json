@@ -14,12 +14,15 @@
     "serve-index": "^1.1.1",
     "serve-static": "^1.2.3"
   },
+  "devDependencies": {
+    "vows": "^0.7.0"
+  },
+  "scripts": {
+      "test": "vows test/* --spec"
+  },
   "preferGlobal": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/MattCheely/stupid-server.git"
-  },
-  "devDependencies": {
-    "vows": "^0.7.0"
   }
 }
