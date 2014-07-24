@@ -19,14 +19,28 @@ function buildRequest(properties) {
     return req;
 }
 
+function noop() {}
+
 var handler = flatten(FLATTEN_ROOT);
 function flattenRequest(req) {
     var request = buildRequest(req);
-    handler(request, {}, function () {});
+    handler(request, {}, noop);
     return request;
 }
 
 vows.describe("The flatten middleware").addBatch({
+    "When inititalized with not root path option": {
+        topic: function() {
+            var req = buildRequest({
+                url: MATCHING_URL
+            });
+            flatten()(req, {}, noop);
+            return req;
+        },
+        "flattens to '/'": function (req) {
+            assert.equal('/', req.url);
+        }
+    },
     "On request that have no referer": {
         topic: flattenRequest({
             url: MATCHING_URL
