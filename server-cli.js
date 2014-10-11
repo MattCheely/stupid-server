@@ -1,13 +1,14 @@
 #!/usr/bin/env node
+'use strict';
 var program = require('commander');
 var server = require('./lib/server');
 
 function collect(val, memo) {
-  memo.push(val);
-  return memo;
+    memo.push(val);
+    return memo;
 }
 
-function parseProxyArg (proxyStr, memo) {
+function parseProxyArg(proxyStr, memo) {
     var split = proxyStr.split('::');
     var proxyDetail = {
         path: split[0],
@@ -43,7 +44,7 @@ function extractOptions(program) {
             opts[optionName] = program[optionName];
         }
         return opts;
-    }, {})
+    }, {});
 }
 
 var options = extractOptions(program);
