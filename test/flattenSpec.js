@@ -1,3 +1,4 @@
+'use strict';
 var vows = require('vows');
 var assert = require('assert');
 var path = require('path');
@@ -28,8 +29,8 @@ function flattenRequest(req) {
     return request;
 }
 
-vows.describe("The flatten middleware").addBatch({
-    "When inititalized with not root path option": {
+vows.describe('The flatten middleware').addBatch({
+    'When inititalized with not root path option': {
         topic: function() {
             var req = buildRequest({
                 url: MATCHING_URL
@@ -37,67 +38,67 @@ vows.describe("The flatten middleware").addBatch({
             flatten()(req, {}, noop);
             return req;
         },
-        "flattens to '/'": function (req) {
+        'flattens to /': function (req) {
             assert.equal('/', req.url);
         }
     },
-    "On request that have no referer": {
+    'On request that have no referer': {
         topic: flattenRequest({
             url: MATCHING_URL
         }),
-        "flattens to the flatten root": function (req) {
+        'flattens to the flatten root': function (req) {
             assert.equal(FLATTEN_ROOT, req.url);
         }
     },
 
-    "On requests with a URL that's under the referrer header path (relative path request)": {
+    'On requests with a URL that\'s under the referrer header path (relative path request)': {
         topic: flattenRequest({
             url: path.join(MATCHING_URL, RELATIVE_PATH),
             referer: 'http://' + HOST + MATCHING_URL
         }),
-        "flattens relative to the flatten root": function (req) {
+        'flattens relative to the flatten root': function (req) {
             var expected = path.join(FLATTEN_ROOT, RELATIVE_PATH);
             assert.equal(expected, req.url);
         }
     },
 
-    "On requests with a URL that's not under the referrer header path (absolute path request)": {
+    'On requests with a URL that\'s not under the referrer header path (absolute path request)': {
         topic: flattenRequest({
             url: path.join(MATCHING_URL, RELATIVE_PATH),
             referer: MATCHING_REFERRER
         }),
-        "does nothing": function (req) {
+        'does nothing': function (req) {
             var expected = path.join(MATCHING_URL, RELATIVE_PATH);
             assert.equal(expected, req.url);
         }
     },
 
-    "On requests with a referrer from a different host": {
+    'On requests with a referrer from a different host': {
         topic: flattenRequest({
             url: path.join(MATCHING_URL, RELATIVE_PATH),
             referer: 'http://otherhost.com' + MATCHING_URL
         }),
-        "flattens to the flatten root": function (req) {
+        'flattens to the flatten root': function (req) {
             assert.equal(FLATTEN_ROOT, req.url);
         }
     },
 
-    "On requests with a URL that's not under the referrer header path": {
+    'On requests with a URL that\'s not under the referrer header path': {
         topic: flattenRequest({
             url: path.join(MATCHING_URL, RELATIVE_PATH),
             referer: 'http://' + HOST + MATCHING_URL
         }),
-        "flattens relative to the flatten root": function (req) {
+        'flattens relative to the flatten root': function (req) {
             var expected = path.join(FLATTEN_ROOT, RELATIVE_PATH);
             assert.equal(expected, req.url);
         }
     },
 
-    "On requests that aren't under the configured path": {
+    'On requests that aren\'t under the configured path': {
         topic: flattenRequest({
             url: NOT_MATCHING_URL
         }),
-        "has no effect": function (req) {
+        'has no effect': function (req) {
             assert.equal(NOT_MATCHING_URL, req.url);
         }
     }
