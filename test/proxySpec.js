@@ -1,5 +1,6 @@
 'use strict';
 var assert = require('assert');
+var sCookie = require('simple-cookie');
 var proxyquire = require('proxyquire');
 var sinon = require('sinon');
 var url = require('url');
@@ -12,7 +13,8 @@ var PARSED_DESTINATION = url.parse(DESTINATION_URL);
 function buildHttpProxyStub() {
     var proxyServerStub = {
         web: sinon.spy(),
-        ws: sinon.spy()
+        ws: sinon.spy(),
+        on: sinon.spy()
     };
 
     var httpProxyStub = {
@@ -55,6 +57,67 @@ vows.describe('The proxy middleware').addBatch({
             var reqUrl = url.parse(req.url);
             assert.equal(reqUrl.pathname, '/baz');
 
+        },
+        'On the proxy response': {
+            topic: function () {
+                var httpProxyStub = buildHttpProxyStub();
+                getMockedMiddleware(httpProxyStub, buildServerStub());
+                var onRes = httpProxyStub.proxyServerStub.on.lastCall.args[1];
+                var proxyRes = {
+                    headers: {
+                        'set-cookie': [
+                            'foo=bar; Path=/path/test; Domain=notaserver; secure',
+                            'baz=bar; Path=/; Domain=notaserver; secure',
+                            'qux=bar; Path=/george; Domain=notaserver; secure'
+                        ]
+                    }
+                };
+                onRes(proxyRes);
+                return proxyRes.headers['set-cookie'];
+            },
+            'cookies with paths that do not match the desination path': {
+                topic: function (setCookies) {
+                    return setCookies[2];
+                },
+                'are unchanged': function (cookie) {
+                    assert.equal(cookie, 'qux=bar; Path=/george; Domain=notaserver; secure');
+                }
+            },
+            'cookies that match the destination path': {
+                topic: function (cookies) {
+                    return cookies.slice(0, 2);
+                },
+                'have their domain cleared': function (setCookies) {
+                    setCookies.slice(0, 2).forEach(function (cookieStr) {
+                        var cookie = sCookie.parse(cookieStr);
+                        assert.equal(cookie.domain, '');
+                    });
+                },
+                'have the secure flag unset': function (setCookies) {
+                    setCookies.slice(0, 2).forEach(function (cookieStr) {
+                        var cookie = sCookie.parse(cookieStr);
+                        assert.equal(cookie.secure, false);
+                    });
+                },
+                'and are under the destination path': {
+                    topic: function (setCookies) {
+                        return setCookies[0];
+                    },
+                    'have the destination path is replaced with the target path': function (cookie) {
+                        var cookieObj = sCookie.parse(cookie);
+                        assert.equal(cookieObj.path, '/foo/bar/test');
+                    }
+                },
+                'and are above the destination path': {
+                    topic: function (setCookies) {
+                        return setCookies[1];
+                    },
+                    'have their path mapped to the target path': function (cookie) {
+                        var cookieObj = sCookie.parse(cookie);
+                        assert.equal(cookieObj.path, '/foo/bar');
+                    }
+                }
+            }
         }
     },
     'For requests that do not math the target path': {
