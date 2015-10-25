@@ -18,11 +18,12 @@ function parseProxyArg(proxyStr, memo) {
 }
 
 program
-    .option('-h, --host [hostname]', 'set the host to listen on [localhost]')
-    .option('-p, --port [portnum]', 'set the port to listen on [8080]', parseInt)
-    .option('-x, --proxy <path::destinationUrl>', 'proxy requests under path to destination', parseProxyArg, [])
     .option('-f, --flatten', 'flatten requests for html or directories to the server root.')
-    .usage('[options] [path-to-host]');
+    .option('-h, --host [hostname]', 'set the host to listen on [localhost]')
+    .option('-p, --port [portnum]', 'set the port to listen on [8080], [8443] with --secure', parseInt)
+    .option('-s, --secure', 'use https with an automatically generated self-signed certificate')
+    .option('-x, --proxy <path::destinationUrl>', 'proxy requests under path to destination', parseProxyArg, [])
+    .usage('[options] [path to serve]');
 
 program.on('--help', function () {
     console.log('  Notes:');
@@ -51,4 +52,8 @@ var options = extractOptions(program);
 options.proxies = options.proxy; //keeps the js server api tidy
 options.path = program.args[0];
 
-server(options);
+server(options, function (err) {
+    if (err) {
+        throw err;
+    }
+});

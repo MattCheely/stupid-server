@@ -35,11 +35,24 @@ function buildServerStub() {
 
 function getMockedMiddleware(httpProxyStub, serverStub) {
     var proxyBuilder = proxyquire('../lib/proxy', {'http-proxy': httpProxyStub});
-    return proxyBuilder(TARGET_PATH, DESTINATION_URL, serverStub);
+    return proxyBuilder(serverStub, {
+        targetPath: TARGET_PATH,
+        destinationUrl: DESTINATION_URL,
+        stripSecure: true
+    });
+}
+
+function getMockedSecureMiddleware(httpProxyStub, serverStub) {
+    var proxyBuilder = proxyquire('../lib/proxy', {'http-proxy': httpProxyStub});
+    return proxyBuilder(serverStub, {
+        targetPath: TARGET_PATH,
+        destinationUrl: DESTINATION_URL,
+        stripSecure: false
+    });
 }
 
 vows.describe('The proxy middleware').addBatch({
-    'For requests that match the target path': {
+    'For requests that match the target path when the stripSecure flag is set': {
         topic: function () {
             var request = {
                 headers: {},
@@ -117,6 +130,47 @@ vows.describe('The proxy middleware').addBatch({
                         assert.equal(cookieObj.path, '/foo/bar');
                     }
                 }
+            }
+        }
+    },
+    'For requests that match the target path when the stripSecure flag is unset': {
+        topic: function () {
+            var request = {
+                headers: {},
+                url: 'http://localhost:8080/foo/bar/baz'
+            };
+            var httpProxyStub = buildHttpProxyStub();
+            var proxyFn = getMockedMiddleware(httpProxyStub, buildServerStub());
+            proxyFn(request);
+            return httpProxyStub.proxyServerStub.web.lastCall.args[0];
+        },
+        'On the proxy response': {
+            topic: function () {
+                var httpProxyStub = buildHttpProxyStub();
+                getMockedSecureMiddleware(httpProxyStub, buildServerStub());
+                var onRes = httpProxyStub.proxyServerStub.on.lastCall.args[1];
+                var proxyRes = {
+                    headers: {
+                        'set-cookie': [
+                            'foo=bar; Path=/path/test; Domain=notaserver; secure',
+                            'baz=bar; Path=/; Domain=notaserver; secure',
+                            'qux=bar; Path=/george; Domain=notaserver; secure'
+                        ]
+                    }
+                };
+                onRes(proxyRes);
+                return proxyRes.headers['set-cookie'];
+            },
+            'cookies that match the destination path': {
+                topic: function (cookies) {
+                    return cookies.slice(0, 2);
+                },
+                'do not have the secure flag unset': function (setCookies) {
+                    setCookies.slice(0, 2).forEach(function (cookieStr) {
+                        var cookie = sCookie.parse(cookieStr);
+                        assert.equal(cookie.secure, true);
+                    });
+                },
             }
         }
     },
