@@ -8,21 +8,25 @@ A rock stupid command-line static file server, built with node/express.
 
 ###Use it
 
-      Usage: stupid-sever [options] [path-to-host]
-
-      Options:
-
-        -h, --help             output usage information
-        -h, --host [hostname]  set the host to listen on [localhost]
-        -p, --port [portnum]   set the port to listen on [8080]
-        -f, --flatten          flatten requests for html or directories to the server root.
-
-      Notes:
-
-        If no path is specified, the CWD will be used
-
-        The --flatten option is primarily useful for single page js apps that use
-        the history api to create natural URIs rather than hash based routes
+    Usage: stupid-server [options] [path to serve]
+    
+     Options:
+    
+       -h, --help                          output usage information
+       -f, --flatten                       flatten requests for html or directories to the server root.
+       -h, --host [hostname]               set the host to listen on [localhost]
+       -p, --port [portnum]                set the port to listen on [8080], [8443] with --secure
+       -s, --secure                        use https with an automatically generated self-signed certificate
+       -x, --proxy <path::destinationUrl>  proxy requests under path to destination
+    
+     Notes:
+    
+       If no path is specified, the CWD will be used
+    
+       Multiple --proxy options can be specified
+    
+       The --flatten option is primarily useful for single page js apps that use
+       the history api to create natural URIs rather than hash based routes
 
 ###Notes
 
