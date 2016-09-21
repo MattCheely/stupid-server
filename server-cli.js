@@ -23,6 +23,8 @@ program
     .option('-p, --port [portnum]', 'set the port to listen on [8080], [8443] with --secure', parseInt)
     .option('-s, --secure', 'use https with an automatically generated self-signed certificate')
     .option('-x, --proxy <path::destinationUrl>', 'proxy requests under path to destination', parseProxyArg, [])
+    .option('-c, --cert [certPath]>', 'use a specifc certificate for ssl')
+    .option('-k, --key [keyPath]', 'key for provided certificate')
     .usage('[options] [path to serve]');
 
 program.on('--help', function () {
@@ -34,6 +36,7 @@ program.on('--help', function () {
     console.log('');
     console.log('    The --flatten option is primarily useful for single page js apps that use');
     console.log('    the history api to create natural URIs rather than hash based routes');
+    console.log('    The -c (--cert) option must be combined with -k (key) with paths to the cert and key provided, respectively');
 });
 
 program.parse(process.argv);
