@@ -71,6 +71,21 @@ vows.describe('The proxy middleware').addBatch({
             assert.equal(reqUrl.pathname, '/baz');
 
         },
+        'On a proxy response without headers': {
+            topic: function () {
+                var httpProxyStub = buildHttpProxyStub();
+                getMockedMiddleware(httpProxyStub, buildServerStub());
+                var onRes = httpProxyStub.proxyServerStub.on.lastCall.args[1];
+                var proxyRes = {
+                    headers: {}
+                };
+                onRes(proxyRes);
+                return proxyRes.headers;
+            },
+            'nothing blows up': function (headers) {
+                assert.deepEqual(headers, {});
+            }
+        },
         'On the proxy response': {
             topic: function () {
                 var httpProxyStub = buildHttpProxyStub();
