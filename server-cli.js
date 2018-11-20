@@ -25,6 +25,7 @@ program
     .option('-x, --proxy <path::destinationUrl>', 'proxy requests under path to destination', parseProxyArg, [])
     .option('-c, --cert [certPath]>', 'use a specifc certificate for ssl')
     .option('-k, --key [keyPath]', 'key for provided certificate')
+    .option('-i, --insecureProxy', 'ignore certificate errors on proxy destination')
     .usage('[options] [path to serve]');
 
 program.on('--help', function () {
