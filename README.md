@@ -3,10 +3,10 @@ stupid-server
 
 A rock stupid command-line static file server, built with node/express.
 
-###Install it
+### Install it
     npm install -g stupid-server
 
-###Use it
+### Use it
 
     Usage: stupid-server [options] [path to serve]
 
@@ -30,7 +30,7 @@ A rock stupid command-line static file server, built with node/express.
        The --flatten option is primarily useful for single page js apps that use
        the history api to create natural URIs rather than hash based routes
 
-###Notes
+### Notes
 
 The flatten middleware may have issues when running under Windows, as it's using the
 path module for some URL path logic, because I'm lazy.
@@ -44,11 +44,11 @@ dev-cert-authority, then `stupid-server -s -c $(dev-cert-authority path localdom
 Possibly Askable Questions
 ==========================
 
-####Why would you build such a thing?
+#### Why would you build such a thing?
 I often just want to fool around with some client-side html/css/js, just to try out an idea. I don't want to jump through hoops to get the code in a browser, but I don't want to use codepen or jsfiddle either, as it may eventually evolve into someting more useful.
 
-####But X other thing already does this
+#### But X other thing already does this
 Well, crap. Now I just feel stupid. Thanks.
 
-####Will you add feature Y?
+#### Will you add feature Y?
 Sure, as long as it's simple enough to set via a command line option.
