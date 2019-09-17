@@ -26,6 +26,7 @@ program
     .option('-c, --cert [certPath]>', 'use a specifc certificate for ssl')
     .option('-k, --key [keyPath]', 'key for provided certificate')
     .option('-i, --insecureProxy', 'ignore certificate errors on proxy destination')
+    .option('-v, --verbose', 'enable verbose logging')
     .usage('[options] [path to serve]');
 
 program.on('--help', function () {
