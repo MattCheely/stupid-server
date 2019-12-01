@@ -1,6 +1,6 @@
 {
   "name": "stupid-server",
-  "version": "0.2.5",
+  "version": "1.0.0",
   "description": "A really stupid server",
   "main": "lib/server.js",
   "author": "Matthew Cheely",
